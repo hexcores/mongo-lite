@@ -1,0 +1,18 @@
+{
+    "name": "hexcores/mongo-lite",
+    "description": "MongoDB Lite Pacakge",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Nyan Lynn Htut",
+            "email": "lynnhtut87@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Hexcores\\MongoLite": "src"
+        }
+    }
+}
