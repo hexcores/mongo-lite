@@ -12,6 +12,12 @@ class Query
 
 	protected $wheres = [];
 
+	protected $sorts;
+
+	protected $limit;
+
+	protected $skip;
+
 	/**
 	 * Set enable or disable auto fill
 	 * "created_at" and "updated_at" date field
@@ -42,13 +48,59 @@ class Query
 		return $this->collection->findOne($criteria);
 	}
 
-	public function all($sort = null, $limit = null, $skip = null)
+	public function all($limit = null, $skip = null)
 	{
-		$cursor = $this->collection->find();
-
-		if ( $sort)
+		if ( $limit)
 		{
-			$cursor->sort($sort);
+			$this->limit($limit);
+		}
+
+		if ( $skip)
+		{
+			$this->skip($skip);
+		}
+
+		return $this->get();
+	}
+
+	public function where($key, $operator = null, $value = null)
+	{
+		if ( is_array($key))
+		{
+			$this->wheres = $key;
+		}
+
+		return $this;
+	}
+
+	public function sort($sorts = [])
+	{
+		$this->sorts = array_merge($this->sorts, $sorts);
+
+		return $this;
+	}
+
+	public function limit($limit)
+	{
+		$this->limit = $limit;
+
+		return $this;
+	}
+
+	public function skip($skip)
+	{
+		$this->limit = $skip;
+
+		return $this;
+	}
+
+	public function get($fields = [])
+	{
+		$cursor = $this->collection->find($this->wheres, $fields);
+
+		if ( ! empty($sorts))
+		{
+			$cursor->sort($sorts);
 		}
 
 		if ( $limit)
@@ -62,14 +114,6 @@ class Query
 		}
 
 		return $cursor;
-	}
-
-	public function where($key, $operator = null, $value = null)
-	{
-		if ( is_array($key))
-		{
-			$this->wheres = $key;
-		}
 	}
 
 	public function insert(array $data)
@@ -110,9 +154,9 @@ class Query
 		$criteria = $this->prepareCriteria($criteria);
 	}
 
-	public function index()
+	public function index($indexs)
 	{
-		$this->collection->ensureIndex
+		$this->collection->ensureIndex($indexs);
 	}
 
 	/**
