@@ -19,7 +19,7 @@ class Query
 	protected $skip;
 
 	/**
-	 * Set enable or disable auto fill
+	 * Set enable or disable auto fillable
 	 * "created_at" and "updated_at" date field
 	 *
 	 * @param  boolean $bool
@@ -36,12 +36,17 @@ class Query
 		$this->collection = $collection;
 	}
 
+	public function collection()
+	{
+		return $this->collection;
+	}
+
 	public function count(array $criteria = [])
 	{
 		return $this->collection->count($criteria);
 	}
 
-	public function first($criteria)
+	public function first($criteria = [])
 	{
 		$criteria = $this->prepareCriteria($criteria);
 
@@ -103,17 +108,24 @@ class Query
 			$cursor->sort($sorts);
 		}
 
-		if ( $limit)
+		if ( $this->limit)
 		{
 			$cursor->limit($limit);
 		}
 
-		if ( $skip)
+		if ( $this->skip)
 		{
 			$cursor->skip($skip);
 		}
 
-		return $cursor;
+		$results = [];
+
+		foreach ($cursor as $k => $v)
+		{
+			$results[] = $this->toDocument($v);
+		}
+
+		return $results;
 	}
 
 	public function insert(array $data)
@@ -125,7 +137,7 @@ class Query
 
 		if ( $res['ok'] == 1)
 		{
-			return $data;
+			return $this->toDocument($data);
 		}
 
 		return false;
@@ -160,6 +172,17 @@ class Query
 	}
 
 	/**
+	 * Convert attributes data to Document instance.
+	 *
+	 * @param  array $attributes
+	 * @return \Hexcores\MongoLite\Document
+	 */
+	protected function toDocument(array $attributes)
+	{
+		return new Document($this, $attributes);
+	}
+
+	/**
 	 * Get fresh date for data store.
 	 *
 	 * @return \MongoDate
@@ -169,6 +192,12 @@ class Query
 		return new MongoDate();
 	}
 
+	/**
+	 * Prepare criteria data
+	 *
+	 * @param  mixed $criteria
+	 * @return array
+	 */
 	protected function prepareCriteria($criteria)
 	{
 		if ( $criteria instanceof MongoId)
@@ -183,4 +212,5 @@ class Query
 
 		return $criteria;
 	}
+
 }
