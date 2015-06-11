@@ -9,7 +9,9 @@
         }
     ],
     "minimum-stability": "dev",
-    "require": {},
+    "require": {
+        "php": ">=5.4.0"
+    },
     "autoload": {
         "files": [
             "src/helpers.php"
@@ -17,5 +19,8 @@
         "psr-4": {
             "Hexcores\\MongoLite\\": "src"
         }
+    },
+    "suggest": {
+        "illuminate/support": "Allows you to use with Laravel or LumenPHP"
     }
 }
