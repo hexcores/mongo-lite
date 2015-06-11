@@ -36,7 +36,7 @@ if ( ! function_exists('mongo_lite_update'))
 if ( ! function_exists('mongo_lite_first'))
 {
 
-	function mongo_lite_update($collection, $criteria)
+	function mongo_lite_first($collection, $criteria)
 	{
 		$collection = mongo_lite($collection);
 
