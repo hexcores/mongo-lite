@@ -11,8 +11,11 @@
     "minimum-stability": "dev",
     "require": {},
     "autoload": {
+        "files": [
+            "src/helpers.php"
+        ],
         "psr-4": {
-            "Hexcores\\MongoLite": "src"
+            "Hexcores\\MongoLite\\": "src"
         }
     }
 }
