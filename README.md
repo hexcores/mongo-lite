@@ -49,6 +49,8 @@ $userCollection  = mongo_lite('users');
 
 #### Create new record
 
+*`"created_at"` and `"updated_at"` fields will be auto filled by `mongo_lite`*
+
 ```php
 $user = ['name' => 'Nyan', 'email' => 'nyan@example.com'];
 
@@ -59,6 +61,8 @@ mongo_lite_insert('users', $user);
 ```
 
 #### Update a record
+
+*`mongo_lite` will be auto update for `updated_at` time*
 
 ```php
 $updateName = ['name' => 'Lynn'];
@@ -79,4 +83,53 @@ $userCollection  = mongo_lite('users');
 $userCollection->delete($query);
 // or simply
 mongo_lite_delete('users', $query);
+```
+
+#### Find the record from database
+
+
+Find all users from collection.
+
+```php
+$users = mongo_lite('users')->all();
+
+if ( count($users) > 0)
+{
+	foreach ( $users as $user)	
+	{
+		echo $user->name . '<br>';
+	}
+}
+
+```
+
+Find only one record from database.
+
+```php
+// Find user by mongo id string
+$user = mongo_lite('users')->first('5579227f8e973cdf148b4567');
+
+// Find user by MongoId instance
+$user = mongo_lite('users')->first(new MongoId('5579227f8e973cdf148b4567'));
+
+// Find user by email
+$user = mongo_lite('users')->first(['email' => 'nyan@example.com']);
+
+echo $user->name;
+```
+
+#### Increment and decrement of MongoDB
+
+```php
+// Increment value 1 to page view field where 'slug' is equal 'about'
+$page->increment(['slug' => 'about'], 'views');
+
+// Increment value 5 to page view field where 'slug' is equal 'about'
+$page->increment(['slug' => 'about'], 'views', 5);
+
+// Decrement value 1 to page view field where 'slug' is equal 'about'
+$page->increment(['slug' => 'about'], 'views', -1);
+
+// DEcrement value 5 to page view field where 'slug' is equal 'about'
+$page->increment(['slug' => 'about'], 'views', -5);
 ```
