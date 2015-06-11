@@ -1,8 +1,16 @@
 <?php namespace Hexcores\MongoLite;
 
-use MongoCollection;
-use MongoDate;
 use MongoId;
+use MongoDate;
+use MongoCollection;
+
+/**
+ * Mongo Query class.
+ *
+ * @package Hexcores\MongoLite
+ * @author  Nyan Lynn Htut <lynnhtut87@gmail.com>
+ * @link https://github.com/hexcores/mongo-lite
+ */
 
 class Query
 {
@@ -30,29 +38,59 @@ class Query
 		static::$date = (boolean) $bool;
 	}
 
+	/**
+	 * Create new Query instance.
+	 *
+	 * @param \MongoCollection $collection
+	 */
 	public function __construct(MongoCollection $collection)
 	{
-
 		$this->collection = $collection;
 	}
 
+	/**
+	 * Get collection instance from query.
+	 * 
+	 * @return \MongoCollection
+	 */
 	public function collection()
 	{
 		return $this->collection;
 	}
 
+	/**
+	 * Counts the number of documents in this collection.
+	 *
+	 * @param  array  $criteria Criteria query for count. This is optional.
+	 * @return int
+	 */
 	public function count(array $criteria = [])
 	{
 		return $this->collection->count($criteria);
 	}
 
+	/**
+	 * Get the first result match with given criteria.
+	 *
+	 * @param  mixed $criteria
+	 * @return \Hexcores\MongoLite\Document|null
+	 */
 	public function first($criteria = [])
 	{
 		$criteria = $this->prepareCriteria($criteria);
 
-		return $this->collection->findOne($criteria);
+		$result = $this->collection->findOne($criteria);
+
+		return ! is_null($result) ? $this->toDocument($result) : null;
 	}
 
+	/**
+	 * Get all records from the database.
+	 *
+	 * @param  int|null $limit
+	 * @param  int|null $skip
+	 * @return array
+	 */
 	public function all($limit = null, $skip = null)
 	{
 		if ( $limit)
@@ -68,6 +106,14 @@ class Query
 		return $this->get();
 	}
 
+	/**
+	 * [where description]
+	 *
+	 * @param  [type] $key      [description]
+	 * @param  [type] $operator [description]
+	 * @param  [type] $value    [description]
+	 * @return [type]
+	 */
 	public function where($key, $operator = null, $value = null)
 	{
 		if ( is_array($key))
@@ -78,6 +124,12 @@ class Query
 		return $this;
 	}
 
+	/**
+	 * Set the "sort" value of the mongo query.
+	 *
+	 * @param  array $sorts
+	 * @return \Hexcores\MongoLite\Query
+	 */
 	public function sort($sorts = [])
 	{
 		$this->sorts = array_merge($this->sorts, $sorts);
@@ -85,6 +137,12 @@ class Query
 		return $this;
 	}
 
+	/**
+	 * Set the "limit" value of the mongo query.
+	 *
+	 * @param  int  $limit
+	 * @return \Hexcores\MongoLite\Query
+	 */
 	public function limit($limit)
 	{
 		$this->limit = $limit;
@@ -92,6 +150,12 @@ class Query
 		return $this;
 	}
 
+	/**
+	 * Set the "skip" value of the mongo query.
+	 *
+	 * @param  int  $skip
+	 * @return \Hexcores\MongoLite\Query
+	 */
 	public function skip($skip)
 	{
 		$this->limit = $skip;
@@ -99,6 +163,13 @@ class Query
 		return $this;
 	}
 
+	/**
+	 * Execute the query and preapre for response data with
+	 * array lists of Document instance.
+	 *
+	 * @param  array  $fields
+	 * @return array
+	 */
 	public function get($fields = [])
 	{
 		$cursor = $this->collection->find($this->wheres, $fields);
@@ -128,6 +199,12 @@ class Query
 		return $results;
 	}
 
+	/**
+	 * Insert a new data record into the database.
+	 *
+	 * @param  array  $data
+	 * @return bool|\Hexcores\MongoLite\Document
+	 */
 	public function insert(array $data)
 	{
 		$data['created_at'] = $this->getFreshDate();
@@ -143,6 +220,13 @@ class Query
 		return false;
 	}
 
+	/**
+	 * Update a data record in the database with given criteria.
+	 *
+	 * @param  mixed $criteria
+	 * @param  array  $data
+	 * @return bool|\Hexcores\MongoLite\Document
+	 */
 	public function update($criteria, array $data)
 	{
 		$data['updated_at'] = $this->getFreshDate();
@@ -161,11 +245,23 @@ class Query
 		return false;
 	}
 
+	/**
+	 * Delete a data record from database with given criteria.
+	 *
+	 * @param  array $criteria
+	 * @return [type]
+	 */
 	public function delete($criteria)
 	{
 		$criteria = $this->prepareCriteria($criteria);
 	}
 
+	/**
+	 * Create ensure index for collection.
+	 *
+	 * @param  array $indexs
+	 * @return void
+	 */
 	public function index($indexs)
 	{
 		$this->collection->ensureIndex($indexs);
