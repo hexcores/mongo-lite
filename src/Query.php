@@ -203,7 +203,7 @@ class Query
 	 * Insert a new data record into the database.
 	 *
 	 * @param  array  $data
-	 * @return bool|\Hexcores\MongoLite\Document
+	 * @return \Hexcores\MongoLite\Document|bool
 	 */
 	public function insert(array $data)
 	{
@@ -225,7 +225,7 @@ class Query
 	 *
 	 * @param  mixed $criteria
 	 * @param  array  $data
-	 * @return bool|\Hexcores\MongoLite\Document
+	 * @return bool
 	 */
 	public function update($criteria, array $data)
 	{
@@ -239,7 +239,7 @@ class Query
 
 		if ( 1 == (int) $res['ok'])
 		{
-			return $data;
+			return true;
 		}
 
 		return false;
@@ -263,6 +263,19 @@ class Query
         }
 
         return false;
+	}
+
+	/**
+	 * Increment a column's value by a given amount.
+	 *
+	 * @param  array   $criteria
+	 * @param  string  $key
+	 * @param  integer $value
+	 * @return bool
+	 */
+	public function increment(array $criteria, $key, $value = 1)
+	{
+		return $this->update($criteria, ['$inc' => [$key => $value]]);
 	}
 
 	/**
