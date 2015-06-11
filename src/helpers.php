@@ -52,6 +52,23 @@ if ( ! function_exists('mongo_lite_update'))
 	}
 }
 
+if ( ! function_exists('mongo_lite_delete'))
+{
+	/**
+	 * Delete a record in the database with mongo lite.
+	 *
+	 * @param  string $collection
+	 * @param  array $criteria
+	 * @return bool
+	 */
+	function mongo_lite_delete($collection, $criteria)
+	{
+		$collection = mongo_lite($collection);
+
+		return $collection->delete($criteria);
+	}
+}
+
 if ( ! function_exists('mongo_lite_first'))
 {
 	/**
