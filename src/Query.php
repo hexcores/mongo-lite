@@ -212,7 +212,7 @@ class Query
 
 		$res = $this->collection->insert($data, ['w' => 1]);
 
-		if ( $res['ok'] == 1)
+		if ( 1 == (int) $res['ok'])
 		{
 			return $this->toDocument($data);
 		}
@@ -237,7 +237,7 @@ class Query
 
 		$res = $this->collection->update($criteria, $data, ['w' => 1]);
 
-		if ( $res['ok'] == 1)
+		if ( 1 == (int) $res['ok'])
 		{
 			return $data;
 		}
@@ -249,11 +249,20 @@ class Query
 	 * Delete a data record from database with given criteria.
 	 *
 	 * @param  array $criteria
-	 * @return [type]
+	 * @return bool
 	 */
 	public function delete($criteria)
 	{
 		$criteria = $this->prepareCriteria($criteria);
+
+		$res = $this->collection->remove($criteria);
+
+        if (1 == (int) $res['ok'])
+        {
+            return true;
+        }
+
+        return false;
 	}
 
 	/**
