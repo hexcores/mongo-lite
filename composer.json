@@ -12,6 +12,9 @@
     "require": {
         "php": ">=5.4.0"
     },
+    "require-dev": {
+        "illuminate/support": "5.1.1"
+    },
     "autoload": {
         "files": [
             "src/helpers.php"
