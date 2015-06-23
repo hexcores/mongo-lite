@@ -181,12 +181,12 @@ class Query
 
 		if ( $this->limit)
 		{
-			$cursor->limit($limit);
+			$cursor->limit($this->limit);
 		}
 
 		if ( $this->skip)
 		{
-			$cursor->skip($skip);
+			$cursor->skip($this->skip);
 		}
 
 		$results = [];
