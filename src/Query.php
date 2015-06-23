@@ -158,7 +158,7 @@ class Query
 	 */
 	public function skip($skip)
 	{
-		$this->limit = $skip;
+		$this->skip = $skip;
 
 		return $this;
 	}
