@@ -20,6 +20,14 @@ class Query
 
 	protected $wheres = [];
 
+	protected $whereKeys = array(
+			'>' => '$gt',
+			'<' => '$lt',
+			'>=' => '$gte',
+			'<=' => '$lte',
+			'!=' => '$ne'
+		);
+
 	protected $sorts;
 
 	protected $limit;
@@ -107,7 +115,7 @@ class Query
 	}
 
 	/**
-	 * [where description]
+	 * where 
 	 *
 	 * @param  [type] $key      [description]
 	 * @param  [type] $operator [description]
@@ -116,9 +124,26 @@ class Query
 	 */
 	public function where($key, $operator = null, $value = null)
 	{
-		if ( is_array($key))
-		{
+		if (is_null($value)) {
+
+			$value = $operator;
+
+			$operator = '=';
+
+		}
+
+		if (is_array($key)) {
+
 			$this->wheres = $key;
+
+		} elseif ('=' == $operator) {
+
+			$this->wheres[$key] = $value;
+
+		} elseif (array_key_exists($operator, $this->whereKeys)) {
+
+			$this->wheres[$key][$this->whereKeys[$operator]] = $value;
+
 		}
 
 		return $this;
@@ -158,7 +183,7 @@ class Query
 	 */
 	public function skip($skip)
 	{
-		$this->limit = $skip;
+		$this->skip = $skip;
 
 		return $this;
 	}
