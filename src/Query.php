@@ -229,9 +229,21 @@ class Query
 	 */
 	public function update($criteria, array $data)
 	{
+		$inc = null;
+
+		if ( isset($data['$inc']))
+		{
+			$inc = $data['$inc'];
+			unset($data['$inc']);
+		}
+
 		$data['updated_at'] = $this->getFreshDate();
 
 		$data = ['$set' => $data];
+
+		if ( $inc) {
+			$data['$inc'] = $inc;
+		}
 
 		$criteria = $this->prepareCriteria($criteria);
 
