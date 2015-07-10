@@ -74,6 +74,8 @@ class Query
 	 */
 	public function count(array $criteria = [])
 	{
+		$criteria = empty($criteria) ? $this->wheres : $criteria;
+		
 		return $this->collection->count($criteria);
 	}
 
