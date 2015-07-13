@@ -133,3 +133,12 @@ $page->increment(['slug' => 'about'], 'views', -1);
 // DEcrement value 5 to page view field where 'slug' is equal 'about'
 $page->increment(['slug' => 'about'], 'views', -5);
 ```
+
+#### Using in Laravel and LumenPHP
+
+MongoLite already have a `ServiceProvider` for Laravel and LumenPHP Framework.
+
+```php
+// Add ServiceProvider in 'config\app.php'
+Hexcores\MongoLite\Laravel\MongoLiteServiceProvider
+```

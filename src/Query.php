@@ -117,12 +117,12 @@ class Query
 	}
 
 	/**
-	 * where 
+	 * Add query filter. 
 	 *
-	 * @param  [type] $key      [description]
-	 * @param  [type] $operator [description]
-	 * @param  [type] $value    [description]
-	 * @return [type]
+	 * @param  string|array $key
+	 * @param  mixed $operator
+	 * @param  mixed $value
+	 * @return \Hexcores\MongoLite\Query
 	 */
 	public function where($key, $operator = null, $value = null)
 	{
@@ -149,6 +149,16 @@ class Query
 		}
 
 		return $this;
+	}
+
+	/**
+	 * Get query filter(where) array.
+	 *
+	 * @return array
+	 */
+	public function getWheres()
+	{
+		return $this->wheres;
 	}
 
 	/**
@@ -195,9 +205,10 @@ class Query
 	 * array lists of Document instance.
 	 *
 	 * @param  array  $fields
+	 * @param  boolean $returnCursor Return MongoCursor without modify with Document instance.
 	 * @return array
 	 */
-	public function get($fields = [])
+	public function get($fields = [], $returnCursor = false)
 	{
 		$cursor = $this->collection->find($this->wheres, $fields);
 
@@ -214,6 +225,10 @@ class Query
 		if ( $this->skip)
 		{
 			$cursor->skip($this->skip);
+		}
+
+		if ( $returnCursor) {
+			return $cursor;
 		}
 
 		$results = [];

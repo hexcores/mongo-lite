@@ -135,4 +135,21 @@ class Connection
 	{
 		return $this->db->{$collectionName};
 	}
+
+	/**
+	 * Drop the database
+	 *
+	 * @return boolean
+	 */
+	public function drop()
+	{
+		$ok = $this->db->drop();
+
+		if ( 1 == (int) $ok['ok'])
+		{
+			return true;
+		}
+
+		return false;
+	}
 }
