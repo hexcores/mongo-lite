@@ -28,7 +28,7 @@ class Query
 			'!=' => '$ne'
 		);
 
-	protected $sorts;
+	protected $sorts = [];
 
 	protected $limit;
 
