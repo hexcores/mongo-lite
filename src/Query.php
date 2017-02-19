@@ -212,9 +212,9 @@ class Query
 	{
 		$cursor = $this->collection->find($this->wheres, $fields);
 
-		if ( ! empty($sorts))
+		if ( ! empty($this->$sorts))
 		{
-			$cursor->sort($sorts);
+			$cursor->sort($this->sorts);
 		}
 
 		if ( $this->limit)
