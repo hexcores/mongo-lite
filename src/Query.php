@@ -95,6 +95,19 @@ class Query
 	}
 
 	/**
+	 * Get Distinct Values
+	 *
+	 * @param  string $key
+	 * @param  mixed $criteria
+	 * @return array
+	 * @author 
+	 **/
+	public function distinct($key, $criteria = [])
+	{
+		return $this->collection->distinct($key, $criteria);
+	}
+
+	/**
 	 * Get all records from the database.
 	 *
 	 * @param  int|null $limit
